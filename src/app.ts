@@ -1,0 +1,73 @@
+import { buildValuationSummary, type ValuationInput } from "./index.js";
+
+const usd = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+
+export function renderApp(input: ValuationInput): string {
+  const summary = buildValuationSummary(input);
+  const cards = summary.findings
+    .map(
+      (asset) => `<article class="card ${asset.posture}">
+        <p class="eyebrow">${asset.segment}</p>
+        <h2>${asset.assetId}</h2>
+        <p>${asset.boardNarrative}</p>
+        <dl>
+          <div><dt>Drift score</dt><dd>${asset.driftScore}</dd></div>
+          <div><dt>Valuation gap</dt><dd>${usd.format(asset.valuationGapUsd)}</dd></div>
+          <div><dt>Rent-roll variance</dt><dd>${asset.rentRollVariancePercent}%</dd></div>
+        </dl>
+        <strong>${asset.nextAction}</strong>
+      </article>`
+    )
+    .join("");
+
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PropTech Valuation Drift Monitor</title>
+  <meta name="description" content="Board-readable PropTech valuation drift monitor for comps, rent roll, cap-rate, and listing evidence." />
+  <style>
+    :root { color-scheme: dark; --bg:#050812; --panel:#0d1727; --line:#263348; --text:#f4f1ea; --muted:#a8b3c7; --cyan:#25d7ef; --green:#58f0b3; --pink:#ff72b6; --violet:#9d8cff; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Segoe UI", sans-serif; background: radial-gradient(circle at 80% 0%, #17203a 0, transparent 34%), var(--bg); color: var(--text); }
+    main { width: min(1180px, calc(100% - 32px)); margin: 0 auto; padding: 64px 0; }
+    .hero { border: 1px solid var(--line); border-radius: 28px; padding: clamp(28px, 5vw, 64px); background: linear-gradient(135deg, rgba(13,23,39,.98), rgba(9,14,25,.94)); box-shadow: 0 24px 80px rgba(0,0,0,.32); }
+    .eyebrow { color: var(--green); text-transform: uppercase; letter-spacing: .18em; font: 700 12px Consolas, monospace; }
+    h1 { max-width: 980px; margin: 18px 0; font: 800 clamp(48px, 8vw, 104px)/.94 "Segoe UI", sans-serif; letter-spacing: -.06em; }
+    .lede { max-width: 780px; color: var(--muted); font-size: 22px; line-height: 1.55; }
+    .metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 38px; }
+    .metric, .card { background: rgba(16,28,48,.78); border: 1px solid var(--line); border-radius: 22px; padding: 24px; }
+    .metric b { display: block; margin-top: 10px; font-size: 42px; }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 22px; }
+    .card.reprice { border-color: rgba(255,114,182,.7); }
+    .card.watch { border-color: rgba(157,140,255,.65); }
+    .card.stable { border-color: rgba(88,240,179,.65); }
+    .card h2 { margin: 10px 0; font-size: 28px; }
+    .card p { color: var(--muted); line-height: 1.55; }
+    dl { display: grid; gap: 10px; margin: 20px 0; }
+    dt { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .12em; }
+    dd { margin: 3px 0 0; font-weight: 800; }
+    strong { color: var(--text); line-height: 1.45; }
+    footer { margin-top: 28px; color: var(--muted); font-size: 13px; }
+    @media (max-width: 820px) { .metrics, .grid { grid-template-columns: 1fr; } h1 { font-size: 52px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <p class="eyebrow">PropTech / valuation drift</p>
+      <h1>Valuation gaps become visible before investor confidence moves.</h1>
+      <p class="lede">PropTech Valuation Drift Monitor turns comps freshness, rent-roll variance, cap-rate movement, and listing mismatches into one board-readable repricing posture.</p>
+      <div class="metrics">
+        <div class="metric"><span class="eyebrow">Portfolio gap</span><b>${usd.format(summary.portfolioGapUsd)}</b></div>
+        <div class="metric"><span class="eyebrow">Average drift</span><b>${summary.averageDriftScore}</b></div>
+        <div class="metric"><span class="eyebrow">Reprice assets</span><b>${summary.repriceAssets}</b></div>
+      </div>
+    </section>
+    <section class="grid">${cards}</section>
+    <footer>PropTech Valuation Drift Monitor · GitHub Pages proof surface · ${summary.asOf}</footer>
+  </main>
+</body>
+</html>`;
+}

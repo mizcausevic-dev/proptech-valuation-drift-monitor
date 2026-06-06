@@ -1,0 +1,42 @@
+{
+  "asOf": "2026-06-06T08:00:00Z",
+  "market": "portfolio valuation, rent roll, comps, and cap-rate evidence lanes",
+  "assets": [
+    {
+      "assetId": "urban-mixed-use-12",
+      "segment": "Mixed-use retail and residential",
+      "lastValuationUsd": 48200000,
+      "latestEvidenceUsd": 43800000,
+      "daysSinceCompRefresh": 41,
+      "rentRollVariancePercent": 7.8,
+      "capRateMoveBps": 82,
+      "listingMismatchCount": 3,
+      "owner": "Portfolio analytics",
+      "nextAction": "Refresh comps and reconcile retail rent-roll concessions before the investor update."
+    },
+    {
+      "assetId": "industrial-flex-west",
+      "segment": "Industrial flex",
+      "lastValuationUsd": 31700000,
+      "latestEvidenceUsd": 30500000,
+      "daysSinceCompRefresh": 16,
+      "rentRollVariancePercent": 2.4,
+      "capRateMoveBps": 26,
+      "listingMismatchCount": 1,
+      "owner": "Asset management",
+      "nextAction": "Keep listed availability and lease-option evidence attached to the next lender packet."
+    },
+    {
+      "assetId": "multifamily-sunbelt-8",
+      "segment": "Multifamily",
+      "lastValuationUsd": 55600000,
+      "latestEvidenceUsd": 50900000,
+      "daysSinceCompRefresh": 34,
+      "rentRollVariancePercent": 5.6,
+      "capRateMoveBps": 61,
+      "listingMismatchCount": 2,
+      "owner": "Investment committee",
+      "nextAction": "Rebase investor story around actual lease-up pace and updated cap-rate sensitivity."
+    }
+  ]
+}
